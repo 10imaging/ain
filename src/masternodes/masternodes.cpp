@@ -783,14 +783,8 @@ CCustomCSView CCustomCSView::CreateFlushableLayer(CAccountHistoryStorage *histor
 }
 
 CCustomCSView CCustomCSView::Snapshot() {
-    auto &db = this->DB();
-    auto *levelDbStorage = dynamic_cast<CStorageLevelDB*>(&db);
-    if (levelDbStorage) {
-        LogPrintf("DEBUG:: Creating new snapped view\n");
-        auto snappedStore = levelDbStorage->Snapshot();
-        return CCustomCSView{snappedStore, *new CHistoryWriters{this->writers}};
-    }
-    throw std::runtime_error("Error opening LevelDB database");
+    auto snap = pcustomcsDB->Snapshot();
+    return CCustomCSView{snap, this->writers};
 }
 
 int CCustomCSView::GetDbVersion() const {

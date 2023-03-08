@@ -263,6 +263,8 @@ public:
      *                        with a zero'd byte array.
      */
     CDBWrapper(const fs::path& path, size_t nCacheSize, bool fMemory = false, bool fWipe = false, bool obfuscate = false);
+    CDBWrapper(CDBWrapper&) = default;
+    CDBWrapper(CDBWrapper&&) = default;
     ~CDBWrapper();
 
     CDBWrapper Snapshot();

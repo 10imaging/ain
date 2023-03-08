@@ -105,6 +105,7 @@ class CStorageLevelDBIterator : public CStorageKVIterator {
 public:
     explicit CStorageLevelDBIterator(std::unique_ptr<CDBIterator>&& it) : it{std::move(it)} { }
     CStorageLevelDBIterator(const CStorageLevelDBIterator&) = delete;
+    CStorageLevelDBIterator(CStorageLevelDBIterator&&) = default;
     ~CStorageLevelDBIterator() override = default;
 
     void Seek(const TBytes& key) override {
@@ -179,7 +180,7 @@ public:
     }
 
     CStorageLevelDB Snapshot() {
-        return CStorageLevelDB{db};
+        return CStorageLevelDB{db, batch};
     }
 
 private:
@@ -190,9 +191,7 @@ private:
     // This starts with a cleared out batch. We can iterate over the batch
     // and copy into the new batch, should the need arise, for but now,
     // it's a view over the committed data.
-    explicit CStorageLevelDB(CDBWrapper &db) :
-            db(db.Snapshot()),
-            batch({this->db}) {}
+    explicit CStorageLevelDB(CDBWrapper &db, CDBBatch &batch) : db(db.Snapshot()), batch(batch) {}
 };
 
 // Flashable storage
@@ -204,6 +203,7 @@ public:
         itState = Invalid;
     }
     CFlushableStorageKVIterator(const CFlushableStorageKVIterator&) = delete;
+    CFlushableStorageKVIterator(CFlushableStorageKVIterator&&) = default;
     ~CFlushableStorageKVIterator() override = default;
 
     void Seek(const TBytes& key) override {
@@ -284,6 +284,7 @@ class CFlushableStorageKV : public CStorageKV {
 public:
     explicit CFlushableStorageKV(CStorageKV& db_) : db(db_) {}
     CFlushableStorageKV(const CFlushableStorageKV&) = delete;
+    CFlushableStorageKV(CFlushableStorageKV&&) = default;
     ~CFlushableStorageKV() override = default;
 
     bool Exists(const TBytes& key) const override {
@@ -452,8 +453,8 @@ CStorageIteratorWrapper<By, KeyType> NewKVIterator(const KeyType& key, MapKV& ma
 class CStorageView {
 public:
     CStorageView() = default;
-    CStorageView(CStorageView &&other) = default;
-    CStorageView(CStorageKV *st) : storage(st) {}
+    CStorageView(CStorageView&&) = default;
+    explicit CStorageView(CStorageKV *st) : storage(st) {}
     virtual ~CStorageView() = default;
 
     template<typename KeyType>

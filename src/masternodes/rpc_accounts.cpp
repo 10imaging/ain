@@ -470,7 +470,7 @@ UniValue getaccount(const JSONRPCRequest& request) {
     }
 
     LOCK(cs_main);
-    CCustomCSView mnview = pcustomcsview->CreateFlushableLayer();
+    CCustomCSView mnview = pcustomcsview->Snapshot();
     auto targetHeight = ::ChainActive().Height() + 1;
 
     mnview.CalculateOwnerRewards(reqOwner, targetHeight);

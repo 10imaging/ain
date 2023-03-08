@@ -210,10 +210,11 @@ CDBWrapper::~CDBWrapper()
 }
 
 CDBWrapper CDBWrapper::Snapshot() {
-    auto snap = this->pdb->GetSnapshot();
-    this->readoptions.snapshot = snap;
-    this->iteroptions.snapshot = snap;
-    return *this;
+    auto copy = CDBWrapper(*this);
+    auto snap = copy.pdb->GetSnapshot();
+    copy.readoptions.snapshot = snap;
+    copy.iteroptions.snapshot = snap;
+    return copy;
 }
 
 bool CDBWrapper::WriteBatch(CDBBatch& batch, bool fSync)
