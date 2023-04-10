@@ -73,7 +73,7 @@ pub fn add_json_rpc_server(runtime: &Runtime, addr: &str) -> Result<(), Box<dyn 
     module.register_method("eth_chainId", |_, _| Ok(format!("0x{:x}", 1132))).unwrap();
     module.register_method("net_version", |_, _| Ok(format!("{}", 1132))).unwrap();
     module.register_method("eth_blockNumber", |_, _| Ok(4)).unwrap();
-    module.register_method("eth_getBalance", |_, _| Ok(format!("0x{:x}", 10 * i32::pow(10, 20)))).unwrap();
+    module.register_method("eth_getBalance", |_, _| Ok(format!("0x{:x}", 10i128 * i128::pow(10, 20)))).unwrap();
 
     let block: Block = serde_json::from_str(r#"{
         "difficulty": "0xbfabcdbd93dda",
