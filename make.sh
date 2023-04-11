@@ -32,7 +32,7 @@ setup_vars() {
     local default_compiler_flags=""
     if [[ "${TARGET}" == "x86_64-pc-linux-gnu" || \
         "${TARGET}" == "x86_64-apple-darwin11" ]]; then
-        default_compiler_flags="CC=clang-16 CXX=clang++-16"
+        default_compiler_flags="CC=clang-15 CXX=clang++-15"
     fi
 
     if [[ "${OSTYPE}" == "darwin"* ]]; then

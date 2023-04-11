@@ -763,8 +763,11 @@ fn main() {
     let mut root = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
     let parent = root.clone();
     root.pop();
-    root.pop();
+    println!("manifest_root: {:?}", root);
+
     let out_dir = env::var("OUT_DIR").unwrap();
+    println!("out-dir: {:?}", out_dir);
+
     let methods = generate_from_protobuf(&root.join("protobuf"), Path::new(&out_dir));
     let _tt = modify_codegen(
         methods,
