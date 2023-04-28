@@ -38,6 +38,7 @@ dependencies = [
  "ain-cpp-imports",
  "anyhow",
  "bincode",
+ "ethbloom",
  "ethereum",
  "evm",
  "hex",

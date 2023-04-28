@@ -178,6 +178,14 @@ impl TryFrom<&str> for SignedTx {
 }
 
 impl SignedTx {
+    pub fn hash(&self) -> H256 {
+        match &self.transaction {
+            TransactionV2::Legacy(t) => t.hash(),
+            TransactionV2::EIP2930(t) => t.hash(),
+            TransactionV2::EIP1559(t) => t.hash(),
+        }
+    }
+
     pub fn nonce(&self) -> U256 {
         match &self.transaction {
             TransactionV2::Legacy(t) => t.nonce,

@@ -73,7 +73,7 @@ where
 
         let used_gas = executor.used_gas();
         let (values, logs) = executor.into_state().deconstruct();
-        let logs = logs.into_iter().collect::<Vec<_>>();
+        let logs = logs.into_iter().collect::<Vec<Log>>();
         if apply && exit_reason.is_succeed() {
             self.backend.apply(values, logs.clone(), true);
         }
@@ -100,7 +100,7 @@ where
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TxResponse {
     pub exit_reason: ExitReason,
     pub data: Vec<u8>,

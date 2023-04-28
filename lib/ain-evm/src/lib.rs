@@ -10,6 +10,7 @@ pub mod storage;
 pub mod traits;
 pub mod transaction;
 mod tx_queue;
+pub mod logs;
 
 use ethereum::{EnvelopedEncodable, TransactionAction, TransactionSignature};
 use primitive_types::{H160, H256, U256};

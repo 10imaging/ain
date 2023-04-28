@@ -1,5 +1,6 @@
 use crate::traits::{PersistentState, PersistentStateError};
 use crate::transaction::SignedTx;
+use crate::executor::TxResponse;
 use ethereum::{EIP658ReceiptData, EnvelopedEncodable, ReceiptV3};
 use primitive_types::{H160, H256, U256};
 
@@ -84,6 +85,7 @@ impl ReceiptHandler {
         failed: Vec<SignedTx>,
         block_hash: H256,
         block_number: U256,
+        tx_responses: HashMap<H256, TxResponse>
     ) -> H256 {
         let mut map = self.transaction_map.write().unwrap();
         let mut receipts = Vec::new();
@@ -92,12 +94,13 @@ impl ReceiptHandler {
 
         for transaction in successful {
             let tv2 = transaction.clone().transaction;
+            let &response = tx_responses.get(&tv2.hash()).unwrap();
             let receipt = Receipt {
                 receipt: ReceiptV3::EIP1559(EIP658ReceiptData {
                     status_code: 1,
-                    used_gas: Default::default(),
-                    logs_bloom: Default::default(),
-                    logs: vec![],
+                    used_gas: U256::from(response.used_gas),
+                    logs_bloom: Default::default(), // TODO: generate logs bloom
+                    logs: response.logs,
                 }),
                 block_hash,
                 block_number,
