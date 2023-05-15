@@ -31,6 +31,7 @@ pub struct RpcBlock {
     pub sha3_uncles: H256,
     pub logs_bloom: String,
     pub size: String,
+    pub base_fee_per_gas: U256,
 }
 
 impl RpcBlock {
@@ -81,6 +82,7 @@ impl RpcBlock {
             sha3_uncles: H256::default(),
             logs_bloom: format!("{:#x}", block.header.logs_bloom),
             size: format!("{header_size:#x}"),
+            base_fee_per_gas: U256::zero(),
         }
     }
 }
